@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.valdir.cursomc.domain.Cidade;
 import com.valdir.cursomc.domain.Cliente;
@@ -16,7 +17,6 @@ import com.valdir.cursomc.domain.enums.TipoCliente;
 import com.valdir.cursomc.dto.ClienteDTO;
 import com.valdir.cursomc.dto.ClienteNewDTO;
 import com.valdir.cursomc.repositories.ClienteRepository;
-import com.valdir.cursomc.repositories.EnderecoRepository;
 import com.valdir.cursomc.services.exceptions.DataIntegrityException;
 import com.valdir.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -26,8 +26,9 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository repo;
 	
-	@Autowired
-	private EnderecoRepository enderecoRepository;
+	// não é necessario após adicionar cascade all na classe Cliente	
+//	@Autowired
+//	private EnderecoRepository enderecoRepository;
 	
 	public Cliente find(Integer id) {
 		
@@ -40,11 +41,14 @@ public class ClienteService {
 		return obj;
 	}
 	
+	@Transactional
 	public Cliente insert(Cliente obj) {
 		obj.setId(null);
 		
 		repo.save(obj);
-		enderecoRepository.save(obj.getEnderecos());
+		
+// não é necessario após adicionar cascade all na classe Cliente
+//		enderecoRepository.save(obj.getEnderecos());
 		
 		return obj;
 	}
